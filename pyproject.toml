@@ -3,7 +3,6 @@ name = "socom"
 version = "0.1.1a1"
 description = "Data analysis tool for studying social communication"
 homepage = "https://github.com/uuinfolab/socom"
-repository = "https://github.com/uuinfolab/socom"
 authors = ["Davide Vega <davide.vega@it.uu.se>"]
 license = "LICENSE"
 readme = "README.md"
