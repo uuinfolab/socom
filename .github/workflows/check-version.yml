@@ -1,0 +1,66 @@
+name: Check version
+
+on:
+  workflow_call:
+    inputs:
+      version-file:
+        required: true
+        type: string
+    
+      curr-version:
+        required: false
+        type: boolean
+        default: true
+    
+    outputs:
+      release_version:
+        description: "The full release version"
+        value: ${{ jobs.check_version.outputs.version }}
+      
+      is_prerelease:
+        description: "A flag indicating if is a prerelease"
+        value: ${{ jobs.check_version.outputs.prerelease }}
+
+jobs:
+  check_version:
+    name: Check version
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      prerelease: ${{ steps.check_prerelease.outputs.prerelease }}
+            
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+        
+      - name: Install dependencies
+        run: |
+          python -m pip install packaging
+          python -m pip install toml
+          
+      - name: Fetch version file
+        id: get_version
+        run: |
+          echo ${{ inputs.curr-version }}
+          if [ "${{ inputs.curr-version }}" = "true" ]; then
+            version=$(python -c "import toml; pyproject = toml.load('${{ inputs.version-file }}'); print(pyproject['tool']['poetry']['version'])")
+          else
+            if git cat-file -e HEAD^1:${{ inputs.version-file }} 2>/dev/null; then
+              version_file=$(git show HEAD^1:${{ inputs.version-file }} | base64)
+              echo ${version_file}
+              version=$(python -c "import base64; import toml; base64_string = '''${version_file}'''; decoded_content = base64.b64decode(base64_string).decode('utf-8'); pyproject = toml.loads(decoded_content); print(pyproject['tool']['poetry']['version'])")
+            else
+              version="0.0.0a1"
+            fi
+          fi
+          echo "version=$version" >> $GITHUB_OUTPUT
+    
+      - name: Check if prerelease
+        id: check_prerelease
+        run: |
+          version=${{ steps.get_version.outputs.version }}
+          prerelease=$(python -c "from packaging.version import Version; print(str(Version('${version}').is_prerelease).lower())")
+          echo "prerelease=$prerelease" >> $GITHUB_OUTPUT

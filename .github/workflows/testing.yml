@@ -1,0 +1,35 @@
+name: Project CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  run_tests:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14]
+        py_version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout library
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry Action
+      uses: snok/install-poetry@v1.4.1
+
+    - name: Install Dependencies
+      run: poetry install
+
+    - name: Test
+      run: poetry run pytest tests --cov=socom tests/

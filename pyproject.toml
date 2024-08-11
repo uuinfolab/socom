@@ -1,7 +1,9 @@
 [tool.poetry]
 name = "socom"
-version = "0.1.0"
+version = "0.1.1a0"
 description = "Data analysis tool for studying social communication"
+homepage = "https://github.com/uuinfolab/socom"
+repository = "https://github.com/uuinfolab/socom"
 authors = ["Davide Vega <davide.vega@it.uu.se>"]
 license = "LICENSE"
 readme = "README.md"
@@ -11,6 +13,24 @@ packages = [
 ]
 
 include = ["CMakeLists.txt", "src", "ext"]
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Operating System :: Unix",
+    "Programming Language :: C",
+    "Programming Language :: C++",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
 
 [tool.poetry.build]
 script = "build.py"
@@ -22,7 +42,7 @@ pybind11 = ">=2.8.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.0.0"
-pytest-sugar = "*"  
+pytest-sugar = "*"
 pytest-cov = "*"
 
 [build-system]
