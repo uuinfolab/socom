@@ -97,7 +97,7 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_TOKEN }}
-          repository-url: https://pypi.org/p/socom
+          repository-url: https://pypi.org/p/socom/
           
           
   github_release:
