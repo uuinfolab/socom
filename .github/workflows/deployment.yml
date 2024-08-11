@@ -13,7 +13,7 @@ jobs:
   get_version_info:
     name: Check current version
 
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
 
     uses: ./.github/workflows/check-version.yml
     with:
